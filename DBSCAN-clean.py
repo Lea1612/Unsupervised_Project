@@ -42,8 +42,7 @@ LABELS = ["Normal", "Fraud"]
 
 file = sys.argv[1]
 
-data = pd.read_csv(file, na_values="?",
-                 low_memory=False)
+data = pd.read_csv(file, na_values="?", low_memory=False)
 
 #nombre d'observations
 n = data.shape[0]
@@ -82,7 +81,7 @@ data.head()
 data_for_dbscan= data.copy()
 
 fraud1 = data_for_dbscan[data_for_dbscan['Class'] ==1]
-normal1 = data_for_dbscan[data_for_dbscan['Class'] ==0]#[:round(len(data_transform)/2)]
+normal1 = data_for_dbscan[data_for_dbscan['Class'] ==0]
 
 data_normal_sampled = resample(normal1, n_samples=5000,random_state=None)
 data_reduce = pd.concat([fraud1, data_normal_sampled], axis=0).sample(frac=1).reset_index(drop=True)
