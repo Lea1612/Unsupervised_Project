@@ -1,11 +1,8 @@
-#!/usr/bin/env python
-# coding: utf-8
+#UNSUPERVISED - Pr Yoram Louzoun
 
-# In[1]:
+#Lea Setruk 345226179
+#Aviva Shneor Simchon 317766731
 
-
-#270420
-#aviva
 import numpy as np
 import pandas as pd
 import sklearn
@@ -13,7 +10,6 @@ import scipy
 from scipy import stats
 import matplotlib.pyplot as plt
 import seaborn as sns
-
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.ticker import NullFormatter
 from sklearn.decomposition import PCA
@@ -21,7 +17,6 @@ from sklearn.metrics import confusion_matrix, silhouette_score
 from sklearn.metrics.cluster import normalized_mutual_info_score
 from sklearn.metrics import classification_report,accuracy_score,silhouette_score,fowlkes_mallows_score, v_measure_score
 from sklearn import metrics
-
 from time import time
 from sklearn import manifold
 from sklearn.utils import check_random_state
@@ -29,6 +24,8 @@ from sklearn.cluster import  DBSCAN
 import hdbscan
 from sklearn.neighbors import NearestNeighbors
 from sklearn.preprocessing import StandardScaler,RobustScaler
+from sklearn.utils import resample
+import sys
 
 #rcParams['figure.figsize'] = 14, 8
 #RANDOM_SEED = 42
@@ -42,11 +39,10 @@ print("Good Luck Lea & Aviva!!!")
 #data.info()
 
 
-# In[2]:
 
+file = sys.argv[1]
 
-
-data = pd.read_csv(r'C:\Users\user\Projet 2020 Bar Ilan\creditcard.csv', na_values="?",
+data = pd.read_csv(file, na_values="?",
                  low_memory=False)
 
 #nombre d'observations
@@ -56,8 +52,6 @@ p = data.shape[1]
 
 print ( n,p)
 
-
-# In[3]:
 
 
 # RobustScaler is less prone to outliers.
@@ -81,10 +75,8 @@ print(data.shape)
 data.head()
 
 
-# In[4]:
 
 
-from sklearn.utils import resample
 #reduce  the data with no transform
 #take for few iteration sample of 5000 normal and all the fraud
 data_for_dbscan= data.copy()
@@ -103,14 +95,9 @@ outlier_fraction = len(fraud1)/float(len(data_normal_sampled))
 print(outlier_fraction)
 
 
-# In[5]:
-
-
 
 data_reduce.head()
 
-
-# In[6]:
 
 
 #Sample of the data
@@ -120,16 +107,10 @@ print(X.shape)
 print(y.shape)
 
 
-# In[7]:
-
-
 X_all = data[['V1','V2','V3','V4','V5','V7','V9','V10','V11','V12','V14','V16','V17','V18','scaled_time']]
 y_all = data['Class']
 print(X_all.shape)
 print(y_all.shape)
-
-
-# In[8]:
 
 
 #MDS
@@ -141,9 +122,6 @@ trans_data = mds.fit_transform(X)
 #print("MDS: %.2g sec" % (t1 - t0))
 
 
-# In[9]:
-
-
 tempdf =pd.DataFrame(trans_data)
 tempdf.head()
 mds_df_with_true_label= tempdf.copy()
@@ -152,22 +130,12 @@ mds_df_with_true_label = mds_df_with_true_label.rename(columns={0: "Dim_1", 1: "
 mds_df_with_true_label.head()
 
 
-# In[10]:
-
 
 plt.figure(figsize=(8,4))
 sns.scatterplot(x="Dim_1",y="Dim_2",hue="Class",data= mds_df_with_true_label,palette =sns.color_palette("hls",2))
 ax = plt.gca()
 ax.set_title("Data after MDS dimension reduce")
 
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
 
 
 #plotting the data
@@ -179,16 +147,12 @@ df_data_pca = pd.DataFrame(data_pca)
 df_data_pca["y"]= y_all
 
 
-# In[ ]:
-
 
 plt.figure(figsize=(8,4))
 sns.scatterplot(x=0,y=1,hue="y",data= df_data_pca,palette =sns.color_palette("hls",2),alpha= 0.6)
 ax = plt.gca()
 ax.set_title("Data after PCA dimension reduce")
 
-
-# In[ ]:
 
 
 # clusterer = hdbscan.HDBSCAN(min_cluster_size=100).fit(X)
@@ -201,13 +165,10 @@ ax.set_title("Data after PCA dimension reduce")
 # plt.scatter(*X.T, s=50, linewidth=0, c=cluster_member_colors, alpha=0.25)
 
 
-# In[ ]:
 
 
 # clusterer.labels_.max()
 
-
-# In[ ]:
 
 
 # data=tempdf.copy
@@ -221,8 +182,6 @@ ax.set_title("Data after PCA dimension reduce")
 # plt.scatter(*projection.T, s=50, linewidth=0, c=cluster_member_colors, alpha=0.25)
 
 
-# In[ ]:
-
 
 # clusterer.minimum_spanning_tree_.plot(edge_cmap='viridis',
 #                                       edge_alpha=0.6,
@@ -231,9 +190,6 @@ ax.set_title("Data after PCA dimension reduce")
 
 
 # # DBSCAN
-
-# In[15]:
-
 
 
 neigh = NearestNeighbors(n_neighbors=2)
@@ -255,14 +211,6 @@ minsample = np.log(len(X))
 print(minsample)
 
 
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
 
 df = X.copy()
 for col in df.columns:
@@ -272,14 +220,8 @@ for col in df.columns:
 #df.head
 
 
-# In[ ]:
-
-
 minsample = np.log(5465)
 print(minsample)
-
-
-# In[132]:
 
 
 
@@ -313,17 +255,12 @@ print("Silhouette Coefficient: %0.3f"
 # #############################################################################
 
 
-# In[127]:
-
-
 #mds = manifold.MDS(2, max_iter=30, n_init=1)
 #trans_data = mds.fit_transform(X)
 
 temp_df = pd.DataFrame(trans_data)
 temp_df.head()
 
-
-# In[128]:
 
 
 temp_df['pred_labels'] = db_label
@@ -334,22 +271,12 @@ df_dbscan.head()
 pd.crosstab(df_dbscan['pred_labels'],df_dbscan['Class'])
 
 
-# In[129]:
-
 
 df_dbscan = pd.DataFrame(temp_df)
 df_dbscan["Class"]=mds_df_with_true_label["Class"]
 df_dbscan.head()
 pd.crosstab(df_dbscan['pred_labels'],df_dbscan['Class'])
 
-
-# In[ ]:
-
-
-
-
-
-# In[121]:
 
 
 #plt.figure(figsize=(8,6))
@@ -366,30 +293,13 @@ plt.sca(ax2)
 sns.scatterplot(x=0, y=1, hue="Class", data=df_dbscan, palette=sns.color_palette("hls",2),  legend="full",ax=ax2)
 ax2.set_title("Data after MDS ")
 
-
-# In[ ]:
-
-
 sns.scatterplot(x=0, y=1, hue="Class", data=df_dbscan, palette=sns.color_palette("hls",2),  legend="full")
-
-
-# In[82]:
-
 
 centers = db.core_sample_indices_
 #print(centers)
 X=df_dbscan.loc[:,[0,1,'pred_labels']]
 X.plot.scatter(x = 0, y = 1, c=db_label, s=50, cmap='viridis')
 plt.scatter(centers[0], centers[1],c='black', s=200, alpha=0.3)
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
 
 
 
