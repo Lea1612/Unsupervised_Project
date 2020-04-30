@@ -31,7 +31,7 @@ import sys
 #RANDOM_SEED = 42
 LABELS = ["Normal", "Fraud"]
 
-print("Good Luck Lea & Aviva!!!")
+
 #chargement  de données
 #data = pd.read_csv(r'C:\Users\utilisateur\Documents\Master 1\Unsupervised\Unsupervised\creditcard.csv', na_values="?",
                 # low_memory=False)
