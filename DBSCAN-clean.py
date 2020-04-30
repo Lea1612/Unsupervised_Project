@@ -32,7 +32,7 @@ import sys
 LABELS = ["Normal", "Fraud"]
 
 
-#chargement  de données
+#data
 #data = pd.read_csv(r'C:\Users\utilisateur\Documents\Master 1\Unsupervised\Unsupervised\creditcard.csv', na_values="?",
                 # low_memory=False)
 
@@ -44,9 +44,9 @@ file = sys.argv[1]
 
 data = pd.read_csv(file, na_values="?", low_memory=False)
 
-#nombre d'observations
+#nb of observations
 n = data.shape[0]
-#nombre de variables
+#nb of variables
 p = data.shape[1]
 
 print ( n,p)
